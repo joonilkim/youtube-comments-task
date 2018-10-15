@@ -18,19 +18,18 @@ const buildRequestForm = (session, pageToken) => ({
   page_token: pageToken
 })
 
-const buildJsonPostRequest = (url, form, session, options) => ({
-  ...{
-    method: 'POST',
-    headers: {
-      'accept-language': 'en-US;q=1.0,en;q=0.9'
+const buildJsonPostRequest = (url, form, session, options) =>
+  Object.assign({
+      method: 'POST',
+      headers: {
+        'accept-language': 'en-US;q=1.0,en;q=0.9'
+      },
+      json: true,
+      jar: session.cookieJar,
+      url,
+      form
     },
-    json: true,
-    jar: session.cookieJar,
-    url,
-    form
-  },
-  ...options
-})
+    options)
 
 const getBody = res =>
   Either.fromNullable(res.body)

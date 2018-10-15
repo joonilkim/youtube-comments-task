@@ -8,6 +8,7 @@
     "coverage": "nyc --reporter=html mocha 'src/test/**/*.js'",
     "format": "prettier-standard './src/**/*.js'",
     "integration-test": "mocha dist/test/integration-tests/*.js",
+    "prepare": "npm run build",
     "prepublish": "npm run build",
     "test": "npm run build && npm run unit-test && npm run integration-test",
     "unit-test": "mocha 'dist/test/*.js' 'dist/test/lib/**/*.js'",
