@@ -18,15 +18,18 @@ const buildRequestForm = (session, pageToken) => ({
   page_token: pageToken
 })
 
-const buildJsonPostRequest = (url, form, session) => ({
-  method: 'POST',
-  headers: {
-    'accept-language': 'en-US;q=1.0,en;q=0.9'
+const buildJsonPostRequest = (url, form, session, options) => ({
+  ...{
+    method: 'POST',
+    headers: {
+      'accept-language': 'en-US;q=1.0,en;q=0.9'
+    },
+    json: true,
+    jar: session.cookieJar,
+    url,
+    form
   },
-  json: true,
-  jar: session.cookieJar,
-  url,
-  form
+  ...options
 })
 
 const getBody = res =>
@@ -34,13 +37,14 @@ const getBody = res =>
     .leftMap(_ => 'Invalid response from YouTube. Missing body,')
     .fold(Task.rejected, Task.of)
 
-const commentPage = (videoId, pageToken) =>
+const commentPage = (videoId, pageToken, options) =>
   getSession(videoId)
     .map(sess =>
       buildJsonPostRequest(
         buildCommentServiceUrl('action_get_comments'),
         buildRequestForm(sess, pageToken),
-        sess
+        sess,
+        options
       )
     )
     .chain(requestWithRetries)

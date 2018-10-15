@@ -26,8 +26,8 @@ const extractNextPageToken = loadMoreWidgetHtml =>
         'API resonse load_more_widget_html does not contain a next page token'
     )
 
-const fetchCommentPage = (videoId, pageToken) =>
-  commentPage(videoId, pageToken)
+const fetchCommentPage = (videoId, pageToken, options) =>
+  commentPage(videoId, pageToken, options)
     .map(p =>
       liftM2(
         (commentHtml, nextPageToken) => ({ commentHtml, nextPageToken }),

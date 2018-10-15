@@ -37,12 +37,12 @@ const addReplies = (videoId, comment) =>
     ? fetchCommentReplies(videoId, comment).fold(() => comment, x => x)
     : Task.of(comment))
 
-const fetchComments = (videoId, pageToken) =>
+const fetchComments = (videoId, pageToken, options) =>
   Either.fromNullable(pageToken)
     .leftMap(_ => fetchFirstPageToken(videoId))
     .map(t => Task.of(t))
     .merge()
-    .chain(t => fetchCommentPage(videoId, t))
+    .chain(t => fetchCommentPage(videoId, t, options))
     .chain(({ commentHtml, nextPageToken }) =>
       tokenizeComments(commentHtml)
         .chain(cs => traverse(cs, Task.of, parseComments))
